@@ -152,11 +152,11 @@ def baseSelection(inventory, x):
                 for j in inventory[i]:
                     print(j, "WHERE IS THIS?")
                     for k in j:
-                        print(k)  # ACCESS THE DICT VALUES FOR HERE
-                    # print("Delete this!")
-        # Search in item[4] for an item[0] that has a volume of item[1]
-        # while item in inventory:
-        #     inventory.remove()
+                        if k in item and j[k]["Volume"] in item:
+                            print("Delete this!")
+                            print(type(inventory))
+                            del inventory[j]
+                            # Now to get it to Delete and re-save
 
     elif x == "C":
         print("DOES IT RUN?")
