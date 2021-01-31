@@ -145,6 +145,7 @@ def baseSelection(inventory, x):
         inventory = removeStock(inventory, item, x[2])
         inventoryWriter(inventory)
     elif x0 == "D":
+        # Will delete miss typed entries or any other entry that needs to be removed
         item = x[1]
         print(item)
         for i in inventory:
