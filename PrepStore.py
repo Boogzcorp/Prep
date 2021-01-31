@@ -154,9 +154,10 @@ def baseSelection(inventory, x):
                     for k in j:
                         if k in item and j[k]["Volume"] in item:
                             print("Delete this!")
-                            print(type(inventory))
-                            del inventory[i][k]
-                            inventoryWriter(inventory)
+                            print(inventory[i][0])
+                            del inventory[i][0]
+
+        inventoryWriter(inventory)
                             # Now to get it to Delete and re-save
 
     elif x == "C":

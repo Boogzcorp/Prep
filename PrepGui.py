@@ -44,11 +44,15 @@ class Prep:
             self.getVolume = self.volume.get()
             self.volume.delete(0, END)
             self.getQuantity = self.quantity.get()
-            self.quantity.delete(0, END)
             self.getExpiry = self.expiry.get()
-            self.expiry.delete(0, END)
-            self.getContainer = self.container.get()
-            self.container.delete(0, END)
+            try:
+                self.quantity.delete(0, END)
+                self.expiry.delete(0, END)
+            except AttributeError:
+                pass
+            finally:
+                self.getContainer = self.container.get()
+                self.container.delete(0, END)
 
 
 
@@ -173,16 +177,15 @@ class Prep:
         vvar = StringVar()
         self.volume = Entry(self.deleteframe, textvariable=vvar)
         self.volume.grid(row=0, column=4, pady=40)
-        self.quantitylabel = Label(self.deleteframe, text="Quantity")
-        self.quantitylabel.grid(row=0, column=5, pady=40)
-        qvar = StringVar()
-        self.quantity = Entry(self.deleteframe, textvariable=qvar)
-        self.quantity.grid(row=0, column=6, pady=40)
-        self.expirylabel = Label(self.deleteframe, text="Expiration Date")
-        self.expirylabel.grid(row=1, column=0, pady=40)
+        # self.quantitylabel = Label(self.deleteframe, text="Quantity")
+        # self.quantitylabel.grid(row=0, column=5, pady=40)
+        qvar = StringVar("")
+        self.quantity = qvar
+        # self.expirylabel = Label(self.deleteframe, text="Expiration Date")
+        # self.expirylabel.grid(row=1, column=0, pady=40)
         evar = StringVar()
-        self.expiry = Entry(self.deleteframe, textvariable=evar)
-        self.expiry.grid(row=1, column=1, pady=40)
+        self.expiry = evar
+        # self.expiry.grid(row=1, column=1, pady=40)
         self.containerlabel = Label(self.deleteframe, text="Container")
         self.containerlabel.grid(row=1, column=3, pady=40)
         cvar = StringVar()
