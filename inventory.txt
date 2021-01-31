@@ -1,0 +1,1 @@
+{"1": [{"Beer": {"Volume": "24pce", "Quantity": 3, "Expiration": ["01-01-20"]}}, {"Rice": {"Volume": "1Kg", "Quantity": 3, "Expiration": ["01-01-20"]}}], "2": [{"Butter": {"Volume": "500g", "Quantity": 2, "Expiration": ["01-02-12"]}}], "4": [{"Cats": {"Volume": "1 cat", "Quantity": 1, "Expiration": ["01-02-10"]}}], "6": []}
