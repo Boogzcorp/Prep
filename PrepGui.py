@@ -7,7 +7,7 @@ import openpyxl
 root = Tk()
 root.title("Prep inventory")
 # root.iconbitmap("icon")
-root.geometry("750x750")
+root.geometry("500x500")
 
 
 def inventorySetup():
@@ -54,31 +54,43 @@ class Prep:
                 self.getContainer = self.container.get()
                 self.container.delete(0, END)
 
+    def status_change(self, event):
+        change = "FUCK!"
+        self.statusbar(event, change)
 
+    def statusbar(self, frame, change):
+        print("You work?")
+        status = Label(frame, text=change, bd=1, relief=SUNKEN, anchor=W)
+        return status
 
-    def homeframe(self):
+    def home_frame(self):
         self.homeframe = Frame(root)
         self.homeframe.pack()
         #menu(homeframe)
-        #statusbar(homeframe)
+        self.status = self.statusbar(self.homeframe, change="")
+        self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
         self.Add = Button(self.homeframe, text="Add Items", command=self.addframe)
-        self.Add.grid(row=0, column=0)
+        self.Add.grid(row=0, column=0, pady=100)
+        self.Add.bind("<Enter>", self.status_change(self.homeframe))  #don't bind to button press, bind to button area
+        # maybe Label?
+        # Leave here
         self.Remove = Button(self.homeframe, text="Remove Items", command=self.removeframe)
         self.Remove.grid(row=0, column=1)
         self.Delete = Button(self.homeframe, text="Delete Entries", command = self.deleteframe)
-        self.Delete.grid(row=0, column=3)
+        self.Delete.grid(row=0, column=2)
         self.Check = Button(self.homeframe, text="Check for Items soon to Expire", command=self.checkExpiry)
         self.Check.grid(row=1, column=0)
         self.Output = Button(self.homeframe, text="Output Inventory to Excel", command=self.outputCycle)
-        self.Output.grid(row=1, column=1)
+        self.Output.grid(row=1, column=2)
 
 
     def addframe(self):
         self.homeframe.destroy()
-        self.addframe = Frame(root, width=500, height=500)
+        self.addframe = Frame(root)
         self.addframe.pack()
         # menu(addframe)
-        # statusbar(addframe)
+        self.status = self.statusbar(self.addframe)
+        self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
         self.itemlabel = Label(self.addframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -106,7 +118,7 @@ class Prep:
         self.container.grid(row=1, column=4, pady=40)
         self.Submit = Button(self.addframe, text="SUBMIT", command=lambda: [self.multi(var=''), self.addCycle()])
         self.Submit.grid(row=3, column=0, pady=40)
-        self.Return = Button(self.addframe, text="HOME", command=lambda: [self.homeframe, self.addframe.Destroy])
+        self.Return = Button(self.addframe, text="HOME", command=lambda: [self.home_frame(), self.addframe.destroy()])
         self.Return.grid(row=3, column=1, pady=40)
 
     def addCycle(self):
@@ -119,7 +131,8 @@ class Prep:
         self.removeframe = Frame(root, width=500, height=500)
         self.removeframe.pack()
         # menu(removeframe)
-        # statusbar(removeframe)
+        self.status = self.statusbar(self.removeframe)
+        self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
         self.itemlabel = Label(self.removeframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -152,12 +165,13 @@ class Prep:
         self.checkbox.grid(row=2, column=4, pady=40)
         self.Submit = Button(self.removeframe, text="SUBMIT", command=lambda: [self.multi(var), self.removeCycle()])
         self.Submit.grid(row=3, column=0, pady=40)
-        self.Return = Button(self.removeframe, text="HOME", command=lambda: [self.homeframe, self.removeframe.Destroy])
+        self.Return = Button(self.removeframe, text="HOME",
+                             command=lambda: [self.home_frame(), self.removeframe.destroy()])
         self.Return.grid(row=3, column=1, pady=40)
 
 
     def removeCycle(self):
-        # Runs the PrepStore code for removing an Item to the store.
+        # Runs the PrepStore code for removing an Item from the store.
         PrepStore.baseSelection(self.inventory, ["R", [self.getItem, self.getVolume, self.getQuantity,
                                                        self.getExpiry, self.getContainer], self.getcheck])
 
@@ -166,7 +180,8 @@ class Prep:
         self.deleteframe = Frame(root, width=500, height=500)
         self.deleteframe.pack()
         # menu(deleteframe)
-        # statusbar(deleteframe)
+        self.status = self.statusbar(self.deleteframe)
+        self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
         self.itemlabel = Label(self.deleteframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -177,15 +192,10 @@ class Prep:
         vvar = StringVar()
         self.volume = Entry(self.deleteframe, textvariable=vvar)
         self.volume.grid(row=0, column=4, pady=40)
-        # self.quantitylabel = Label(self.deleteframe, text="Quantity")
-        # self.quantitylabel.grid(row=0, column=5, pady=40)
         qvar = StringVar("")
         self.quantity = qvar
-        # self.expirylabel = Label(self.deleteframe, text="Expiration Date")
-        # self.expirylabel.grid(row=1, column=0, pady=40)
         evar = StringVar()
         self.expiry = evar
-        # self.expiry.grid(row=1, column=1, pady=40)
         self.containerlabel = Label(self.deleteframe, text="Container")
         self.containerlabel.grid(row=1, column=3, pady=40)
         cvar = StringVar()
@@ -193,11 +203,11 @@ class Prep:
         self.container.grid(row=1, column=4, pady=40)
         self.Submit = Button(self.deleteframe, text="SUBMIT", command=lambda: [self.multi(var=''), self.deletecycle()])
         self.Submit.grid(row=3, column=0, pady=40)
-        self.Return = Button(self.deleteframe, text="HOME", command=lambda: [self.homeframe, self.deleteframe.Destroy])
+        self.Return = Button(self.deleteframe, text="HOME",
+                             command=lambda: [self.home_frame(), self.deleteframe.destroy()])
         self.Return.grid(row=3, column=1, pady=40)
 
     def deletecycle(self):
-        # WILL NEED TO WRITE ADDITIONAL CODE FOR THIS IN PrepStore
         PrepStore.baseSelection(self.inventory, ["D", [self.getItem, self.getVolume, self.getQuantity,
                                                        self.getExpiry, self.getContainer]])
 
@@ -207,13 +217,18 @@ class Prep:
         self.checkframe.pack()
         out_of_date = PrepStore.baseSelection(self.inventory, "C")
         for each in out_of_date:
-            label = Label(self.checkframe, text=each).pack()
+            Label(self.checkframe, text=each).pack()
+        self.Return = Button(self.checkframe, text="HOME",
+                             command=lambda: [self.home_frame(), self.checkframe.destroy()])
+        self.Return.pack()
+        self.status = self.statusbar(self.checkframe)
+        self.status.pack(anchor=S)
 
     def outputCycle(self):
-        print("It works")
+        PrepStore.baseSelection(self.inventory, "L")
 
 
 
 Prep = Prep(root)
-Prep.homeframe()
+Prep.home_frame()
 mainloop()
