@@ -54,24 +54,24 @@ class Prep:
                 self.getContainer = self.container.get()
                 self.container.delete(0, END)
 
-    def status_change(self, event):
-        change = "FUCK!"
-        self.statusbar(event, change)
-
-    def statusbar(self, frame, change):
-        print("You work?")
-        status = Label(frame, text=change, bd=1, relief=SUNKEN, anchor=W)
-        return status
+    # def status_change(self, event):
+    #     change = "FUCK!"
+    #     self.statusbar(event, change)
+    #
+    # def statusbar(self, frame, change):
+    #     print("You work?")
+    #     status = Label(frame, text=change, bd=1, relief=SUNKEN, anchor=W)
+    #     return status
 
     def home_frame(self):
         self.homeframe = Frame(root)
         self.homeframe.pack()
         #menu(homeframe)
-        self.status = self.statusbar(self.homeframe, change="")
-        self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
+        # self.status = self.statusbar(self.homeframe, change="")
+        # self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
         self.Add = Button(self.homeframe, text="Add Items", command=self.addframe)
         self.Add.grid(row=0, column=0, pady=100)
-        self.Add.bind("<Enter>", self.status_change(self.homeframe))  #don't bind to button press, bind to button area
+        # self.Add.bind("<Enter>", self.status_change(self.homeframe))  #don't bind to button press, bind to button area
         # maybe Label?
         # Leave here
         self.Remove = Button(self.homeframe, text="Remove Items", command=self.removeframe)
@@ -89,8 +89,8 @@ class Prep:
         self.addframe = Frame(root)
         self.addframe.pack()
         # menu(addframe)
-        self.status = self.statusbar(self.addframe)
-        self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
+        # self.status = self.statusbar(self.addframe)
+        # self.status.grid(row=4, column=0, columnspan=6, sticky=W+E)
         self.itemlabel = Label(self.addframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -131,8 +131,8 @@ class Prep:
         self.removeframe = Frame(root, width=500, height=500)
         self.removeframe.pack()
         # menu(removeframe)
-        self.status = self.statusbar(self.removeframe)
-        self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
+        # self.status = self.statusbar(self.removeframe)
+        # self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
         self.itemlabel = Label(self.removeframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -180,8 +180,8 @@ class Prep:
         self.deleteframe = Frame(root, width=500, height=500)
         self.deleteframe.pack()
         # menu(deleteframe)
-        self.status = self.statusbar(self.deleteframe)
-        self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
+        # self.status = self.statusbar(self.deleteframe)
+        # self.status.grid(row=4, column=0, columnspan=4, sticky=W + E)
         self.itemlabel = Label(self.deleteframe, text="Item")
         self.itemlabel.grid(row=0, column=0, pady=40)
         ivar = StringVar()
@@ -221,8 +221,8 @@ class Prep:
         self.Return = Button(self.checkframe, text="HOME",
                              command=lambda: [self.home_frame(), self.checkframe.destroy()])
         self.Return.pack()
-        self.status = self.statusbar(self.checkframe)
-        self.status.pack(anchor=S)
+        # self.status = self.statusbar(self.checkframe)
+        # self.status.pack(anchor=S)
 
     def outputCycle(self):
         PrepStore.baseSelection(self.inventory, "L")

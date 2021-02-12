@@ -14,8 +14,8 @@ import openpyxl
 # A list of all containers, containers are dictionaries that hold stockpiled items and their associated attributes
 stockOnHand = []
 currentdate = datetime.date.today()
-oneWeek = datetime.timedelta(days=7)
-
+oneMonth = datetime.timedelta(days=30)
+# oneWeek = datetime.timedelta(days=7)
 
 def addNewItem(inventory, itemDescription):
     entry = ["ITEM", "Volume", "Quantity", "Expiration", "Container"]
@@ -31,6 +31,7 @@ def addNewItem(inventory, itemDescription):
 
 def checkOutOfDate(data):
     expired = []
+    urgent = []
     for container in data:
         for item in data[container]:
             for i in item:
@@ -39,10 +40,13 @@ def checkOutOfDate(data):
                         pass
                     else:
                         expDate = datetime.datetime.strptime(j, '%d-%m-%y').date()
-                        if currentdate + oneWeek >= expDate:
+                        # if currentdate + oneWeek >= expDate:
+                        # urgent.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
+                        # container, j))
+                        if currentdate + oneMonth >= expDate:
                             expired.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
                                                                                                container, j))
-    return expired
+    return expired  #, urgent
 
 
 def checkIfInStock(current_inventory, itemDescription):
