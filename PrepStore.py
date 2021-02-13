@@ -15,7 +15,7 @@ import openpyxl
 stockOnHand = []
 currentdate = datetime.date.today()
 oneMonth = datetime.timedelta(days=30)
-# oneWeek = datetime.timedelta(days=7)
+oneWeek = datetime.timedelta(days=7)
 
 def addNewItem(inventory, itemDescription):
     entry = ["ITEM", "Volume", "Quantity", "Expiration", "Container"]
@@ -42,7 +42,7 @@ def checkOutOfDate(data):
                         expDate = datetime.datetime.strptime(j, '%d-%m-%y').date()
                         if currentdate + oneWeek >= expDate:
                             urgent.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
-                            container, j))
+                                                                                              container, j))
                         if currentdate + oneMonth >= expDate:
                             expired.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
                                                                                                container, j))

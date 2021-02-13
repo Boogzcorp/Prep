@@ -216,10 +216,11 @@ class Prep:
         self.checkframe = Frame(root, width=500, height=500)
         self.checkframe.pack()
         out_of_date = PrepStore.baseSelection(self.inventory, "C")
-        if len(out_of_date[1] >= 1:
-               pass
-               # Create warning popup
-        for each in out_of_date[0]:
+        if len(out_of_date[1]) >= 1:
+            print(out_of_date[1])
+            pass
+        # Create warning popup
+        for each in out_of_date:
             Label(self.checkframe, text=each).pack()
         self.Return = Button(self.checkframe, text="HOME",
                              command=lambda: [self.home_frame(), self.checkframe.destroy()])
