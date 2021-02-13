@@ -218,7 +218,7 @@ class Prep:
         out_of_date = PrepStore.baseSelection(self.inventory, "C")
         if len(out_of_date[1]) >= 1:
             print(out_of_date[1])
-            pass
+            self.messagebox.showinfo(title="URGENT", message=out_of_date[1])
         # Create warning popup
         for each in out_of_date:
             Label(self.checkframe, text=each).pack()
