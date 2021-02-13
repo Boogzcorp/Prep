@@ -40,13 +40,13 @@ def checkOutOfDate(data):
                         pass
                     else:
                         expDate = datetime.datetime.strptime(j, '%d-%m-%y').date()
-                        # if currentdate + oneWeek >= expDate:
-                        # urgent.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
-                        # container, j))
+                        if currentdate + oneWeek >= expDate:
+                            urgent.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
+                            container, j))
                         if currentdate + oneMonth >= expDate:
                             expired.append("{}: {}, In container {} Expires soon! ({})".format(i, item[i]["Volume"],
                                                                                                container, j))
-    return expired  #, urgent
+    return [expired, urgent]
 
 
 def checkIfInStock(current_inventory, itemDescription):
