@@ -2,16 +2,13 @@ from tkinter import *
 from tkinter import messagebox
 import PrepStore
 import json
-import openpyxl
-# from PIL import ImageTk,Image
+
 
 root = Tk()
 root.title("Prep inventory")
-# root.iconbitmap("icon")
 width = int(root.winfo_screenwidth()/2)
 height = int(root.winfo_screenheight()/2)
 root.geometry(f'{width}x{height}')
-
 
 
 def inventorySetup():
@@ -61,7 +58,7 @@ class Prep:
     def destroy_menu(self):
         for child in root.winfo_children():
             child.destroy()
-        print(height, width, "****")
+        root.update()
         # Once everything in current frame is destroyed leaving only root, Runs menu and status_bar
         self.menu()
         self.status_bar(root, status="")  # Find out why this runs but only shows misplaced in fullscreen
@@ -72,28 +69,26 @@ class Prep:
         file_menu = Menu(menu)
         menu.add_cascade(label="File", menu=file_menu)
         file_menu.add_command(label="Add Items", command=lambda: [self.destroy_menu(), self.add_frame()])
-        # Destroys everything in current frame then loads add_frame
-        file_menu.add_command(label="Remove Items", command=self.remove_frame)
-        file_menu.add_command(label="Delete Entries", command=self.delete_frame)
-        file_menu.add_command(label="Check for Items soon to Expire", command=self.check_Expiry)
-        file_menu.add_command(label="Output Inventory to Excel", command=self.output_Cycle)
-        file_menu.add_command(label="TEST", command=self.destroy_menu)
+        file_menu.add_command(label="Remove Items", command=lambda: [self.destroy_menu(), self.remove_frame()])
+        file_menu.add_command(label="Delete Entries", command=lambda: [self.destroy_menu(), self.delete_frame()])
+        file_menu.add_command(label="Check for Items soon to Expire",
+                              command=lambda: [self.destroy_menu(), self.check_Expiry()])
+        file_menu.add_command(label="Output Inventory to Excel",
+                              command=lambda: [self.destroy_menu(), self.output_Cycle()])
         file_menu.add_command(label="Exit", command=exit)
 
     def status_bar(self, frame, status):
-        # creates a status bar at the bottom that gives "Tooltips" about the function or purpose of a Widget
-        stat_bar = Label(frame, text=status, bd=1, relief=SUNKEN, anchor=W, name="this")
-        stat_bar.place(x=0, y=(height-20), width=width)  # should display 20 pixels above the bottom
-        # Displays fine when loaded by buttons, displays in wrong place and only viewable in fullscreen if using drop
-        # down bar.
+        # Creates a status bar at the bottom that gives "Tooltips" about the function or purpose of a Widget
+        stat_bar = Label(frame, text=status, bd=1, relief=SUNKEN, anchor=W)
+        stat_bar.place(x=0, y=(height-20), width=width)
 
     def on_enter(self, event):
         # When cursor enters area of a widget, identifies widget by text or name and sets status to information found
         # in phrasedict before sending to status bar for updating.
         phrasedict = {"Add Items": "Add Items to the inventory", "Remove Items": "For when an Item is used up",
                       "Delete Entries": "For when an entry has been made in error and needs to be removed",
-                      "Check for Items soon to Expire": "Gives one months notice on items due to expire and a WARNING when "
-                                                        "there is only one week left",
+                      "Check for Items soon to Expire": "Gives one months notice on items due to expire and a WARNING "
+                                                        "when there is only one week left",
                       "Output Inventory to Excel": "Produce Excel spreadsheet of Inventory",
                       "item": "Name of Item to be stored, removed or deleted",
                       "volume": "Measured units, Grams, Kilograms, Litres etc",
@@ -116,7 +111,7 @@ class Prep:
 
     def home_frame(self):
         # Setup for Home including all buttons.
-        self.homeframe = Frame(root, name="hF")
+        self.homeframe = Frame(root)
         self.homeframe.pack()
         self.menu()
         self.status_bar(root, status="")
@@ -192,8 +187,20 @@ class Prep:
 
     def addCycle(self):
         # Runs the PrepStore code for Adding an Item to the store.
-        PrepStore.baseSelection(self.inventory, ["A", [self.getItem, self.getVolume, self.getQuantity, self.getExpiry,
-                                                       self.getContainer]])
+        regex_expression = re.compile(r"\d{2}-\d{2}-\d{2}|N/A")
+        matches = regex_expression.finditer(self.getExpiry)
+        for match in matches:
+            if self.getExpiry == match.group(0):
+                try:
+                    int(self.getQuantity)
+                except:
+                    pass
+                else:
+                    PrepStore.baseSelection(self.inventory,
+                                        ["A", [self.getItem, self.getVolume, self.getQuantity, self.getExpiry,
+                                               self.getContainer]])
+            else:
+                pass
 
     def remove_frame(self):
         # Setup for Removing items from inventory including all buttons and entry boxes
@@ -253,8 +260,20 @@ class Prep:
 
     def removeCycle(self):
         # Runs the PrepStore code for removing an Item from the store.
-        PrepStore.baseSelection(self.inventory, ["R", [self.getItem, self.getVolume, self.getQuantity,
-                                                       self.getExpiry, self.getContainer], self.getcheck])
+        regex_expression = re.compile(r"\d{2}-\d{2}-\d{2}|N/A")
+        matches = regex_expression.finditer(self.getExpiry)
+        for match in matches:
+            if self.getExpiry == match.group(0):
+                try:
+                    int(self.getQuantity)
+                except:
+                    pass
+                else:
+                    PrepStore.baseSelection(self.inventory, ["R", [self.getItem, self.getVolume, self.getQuantity,
+                                                                   self.getExpiry, self.getContainer], self.getcheck])
+            else:
+                pass
+
 
     def delete_frame(self):
         # Setup for deleting bad entries in inventory including all buttons and entry boxes
@@ -324,8 +343,6 @@ class Prep:
         PrepStore.baseSelection(self.inventory, "L")
 
 
-
 Prep = Prep(root)
-print(height, width)
 Prep.home_frame()
 mainloop()

@@ -1,9 +1,7 @@
 import datetime
 import json
 import pandas as pd
-import openpyxl
-
-
+import os
 
 
 # Create a program to catalogue items for storage.
@@ -101,6 +99,7 @@ def removeStock(inventory, item, expiry_state):
         inventoryWriter(inventory)
     return inventory
 
+
 def baseSelection(inventory, x):
     # Set up for selecting user options.
     x0 = x[0].upper()
@@ -118,16 +117,22 @@ def baseSelection(inventory, x):
         # Will delete mistyped entries or any other entry that needs to be removed
         item = x[1]
         for i in inventory:
+            count = 0
             if i == item[4]:
                 for j in inventory[i]:
+                    count += 1
                     for k in j:
                         if k in item and j[k]["Volume"] in item:
-                            del inventory[i][0]
+                            del inventory[i][count-1]
+        if not inventory[i]:
+            del inventory[i]
+
         inventoryWriter(inventory)
         # Now to get it to Delete empty containers and re-save
 
     elif x == "C":
-        # Checks expiry dates of items returning those with less than 1 week before expiry
+        # Checks expiry dates of items returning those with less than 1 month before expiry
+        # and flags urgent those that have less than 1 week
         return checkOutOfDate(inventory)
 
     elif x == "L":
@@ -152,6 +157,10 @@ def baseSelection(inventory, x):
                     column_length = max(basedf[column].astype(str).map(len).max()+2, len(column))
                     col_idx = basedf.columns.get_loc(column)
                     writer.sheets[each].set_column(col_idx, col_idx, column_length)
+        try:
+            os.startfile('output.xlsx')
+        except:
+            pass
 
 
 def inventoryWriter(inventory):
