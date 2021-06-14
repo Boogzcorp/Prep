@@ -2,12 +2,15 @@ from tkinter import *
 from tkinter import messagebox
 import PrepStore
 import json
+import sys
 
 
 root = Tk()
 root.title("Prep inventory")
+root.iconbitmap('fire.ico')
 width = int(root.winfo_screenwidth()/2)
 height = int(root.winfo_screenheight()/2)
+print(width, height)
 root.geometry(f'{width}x{height}')
 
 
@@ -28,7 +31,7 @@ def inventorySetup():
 
 
 class Prep:
-
+    root.update()
     def __init__(self, root):  # What kind of Attributes?
         self.inventory = inventorySetup()
     def multi(self, var):
@@ -75,12 +78,13 @@ class Prep:
                               command=lambda: [self.destroy_menu(), self.check_Expiry()])
         file_menu.add_command(label="Output Inventory to Excel",
                               command=lambda: [self.destroy_menu(), self.output_Cycle()])
-        file_menu.add_command(label="Exit", command=exit)
+        file_menu.add_command(label="Exit", command=sys.exit)
 
     def status_bar(self, frame, status):
         # Creates a status bar at the bottom that gives "Tooltips" about the function or purpose of a Widget
         stat_bar = Label(frame, text=status, bd=1, relief=SUNKEN, anchor=W)
         stat_bar.place(x=0, y=(height-20), width=width)
+
 
     def on_enter(self, event):
         # When cursor enters area of a widget, identifies widget by text or name and sets status to information found
@@ -114,7 +118,7 @@ class Prep:
         self.homeframe = Frame(root)
         self.homeframe.pack()
         self.menu()
-        self.status_bar(root, status="")
+        self.status_bar(root, status="")  # Runs with incorrect sizing
         self.Add = Button(self.homeframe, text="Add Items", command=self.add_frame)
         self.Add.grid(row=0, column=0, pady=100)
         self.Add.bind("<Enter>", self.on_enter)

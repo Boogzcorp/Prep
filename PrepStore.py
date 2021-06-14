@@ -1,7 +1,7 @@
-import datetime
-import json
+import datetime  # need
+import json  # need
 import pandas as pd
-import os
+import os  # need
 
 
 # Create a program to catalogue items for storage.
@@ -154,7 +154,7 @@ def baseSelection(inventory, x):
                     basedf.loc[len(basedf)] = entry
                 basedf.to_excel(writer, sheet_name=each, index=False)  # index false
                 for column in basedf:
-                    column_length = max(basedf[column].astype(str).map(len).max()+2, len(column))
+                    column_length = max((basedf[column].astype(str).map(len).max()+2), len(column)+2)
                     col_idx = basedf.columns.get_loc(column)
                     writer.sheets[each].set_column(col_idx, col_idx, column_length)
         try:
